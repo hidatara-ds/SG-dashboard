@@ -19,6 +19,12 @@ logging.basicConfig(
 session = requests.Session()
 session.headers.update(HEADERS)
 
+def deviceMapping(device_name):
+    device_mapping = {
+        "Monitoring_Hidroponik": "HZ1"  # Map Monitoring_Hidroponik to HZ1
+    }
+    return device_mapping.get(device_name, device_name)
+
 def get_latest_data(app_name, device_name, retries=3, delay=5):
     url = f"https://platform.antares.id:8443/~/antares-cse/antares-id/{app_name}/{device_name}/la"
     
@@ -31,7 +37,7 @@ def get_latest_data(app_name, device_name, retries=3, delay=5):
                 raw = response.json()["m2m:cin"]["con"]
                 parsed = json.loads(raw)
                 return {
-                    "device_code": device_name,  
+                    "device_code":  deviceMapping(device_name),  
                     "encoded_data": parsed.get("data"),
                     "timestamp": datetime.now()
                 }
@@ -100,11 +106,11 @@ def run_middleware():
     
     for app_name, device_names in APP_DEVICES.items():
         for device_name in device_names:
-            logging.info(f"Memproses {app_name}/{device_name}")
+            # logging.info(f"Memproses {app_name}/{device_name}")
             data = get_latest_data(app_name, device_name)
             if data and save_to_database(data, app_name, device_name):
                 successful += 1
-                logging.info(f"Berhasil memproses {device_name}: {data['encoded_data']}")
+                # logging.info(f"Berhasil memproses {device_name}: {data['encoded_data']}")
             else:
                 logging.warning(f"Gagal memproses {device_name}")
             time.sleep(3)  # Delay antar request

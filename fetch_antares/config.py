@@ -15,7 +15,7 @@ APP_DEVICES = {
     # "MELON": ["MZ1", "MZ2"],  
     # "SELADA": ["SZ12", "SZ3", "SZ4"],
     # "GREENHOUSE": ["GZ1"],
-    # "DRTPM-Hidroponik": ["Monitoring_Hidroponik"]
+    "DRTPM-Hidroponik": ["Monitoring_Hidroponik"]
 }
 
 DB_CONFIG = {
