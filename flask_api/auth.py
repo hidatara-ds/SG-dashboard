@@ -1,12 +1,24 @@
-from flask import request, jsonify
+# flask_api/auth.py
+import os, hmac
 from functools import wraps
-from config import Config
+from flask import request, jsonify
 
-def require_api_key(f):
-    @wraps(f)
-    def decorated(*args, **kwargs):
-        client_key = request.headers.get("X-API-KEY")
-        if client_key != Config.API_KEY:
-            return jsonify({"error": "Unauthorized"}), 401
-        return f(*args, **kwargs)
-    return decorated
+API_KEY = os.environ.get("API_KEY")  # pastikan ini ter-set di Railway
+
+def require_api_key(fn):
+    @wraps(fn)
+    def wrapper(*args, **kwargs):
+        # prioritas: header
+        incoming = request.headers.get("X-API-KEY")
+        # (opsional) izinkan query ?key= untuk testing cepat di browser
+        if not incoming:
+            incoming = request.args.get("key")
+
+        if API_KEY and incoming and hmac.compare_digest(incoming, API_KEY):
+            return fn(*args, **kwargs)
+
+        # log tipis biar gampang tracing
+        request_ip = request.headers.get("X-Forwarded-For", request.remote_addr)
+        print(f"[auth] unauthorized from {request_ip}")
+        return jsonify({"status": "error", "message": "Unauthorized"}), 401
+    return wrapper
