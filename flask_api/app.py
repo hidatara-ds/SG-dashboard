@@ -13,7 +13,12 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
 from routes import bp
 
 # Import webhook functionality  
-from webhook import register_webhook_routes
+try:
+    from webhook import register_webhook_routes
+    _HAS_WEBHOOK = True
+except Exception:
+    register_webhook_routes = None
+    _HAS_WEBHOOK = False
 
 def create_app():
     """Create Flask application with webhook support"""
@@ -37,9 +42,12 @@ def create_app():
     app.register_blueprint(bp)
     app.logger.info("API routes registered")
     
-    # Register webhook routes
-    register_webhook_routes(app)
-    app.logger.info("Webhook routes registered")
+    # Register webhook routes if available
+    if _HAS_WEBHOOK and callable(register_webhook_routes):
+        register_webhook_routes(app)
+        app.logger.info("Webhook routes registered")
+    else:
+        app.logger.info("Webhook package not found; skipping webhook routes")
     
     return app
 

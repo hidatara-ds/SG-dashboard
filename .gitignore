@@ -1,0 +1,71 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+*.egg-info/
+.eggs/
+.build/
+.pytest_cache/
+.mypy_cache/
+.dmypy.json
+
+# Virtual environments
+.venv/
+venv/
+env/
+ENV/
+
+# Byte-compiled / optimized / DLL files
+*$py.class
+
+# Packaging
+build/
+dist/
+
+# Coverage / testing
+.coverage
+.coverage.*
+htmlcov/
+.pyre/
+.tox/
+.nox/
+
+# Logs
+logs/
+*.log
+
+# Environment files
+.env
+.env.*
+!.env.example
+flask_api/.env
+flask_api/.env.*
+!flask_api/.env.example
+
+# OS / Editor
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Node (if dashboard present later)
+node_modules/
+*.tsbuildinfo
+
+# Docker local artifacts
+*.local.yml
+
+# Shell script outputs
+*.bak
+
+# SQL dumps (keep schema files)
+*.sql
+!back-end/database.sql
+!back-end/dummy-database.sql
+
+# Project-specific caches
+*.cache
