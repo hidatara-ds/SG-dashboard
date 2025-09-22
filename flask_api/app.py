@@ -2,7 +2,7 @@
 import sys
 import os
 import logging
-from flask import Flask
+from flask import Flask, send_from_directory
 from flask_cors import CORS
 from config import Config
 
@@ -53,14 +53,14 @@ def create_app():
 
 app = create_app()
 
-# Root route for service landing
+# Root route: serve static index.html if present, else JSON
 @app.route('/')
 def index():
-    return {
-        "status": "ok",
-        "service": "Smart Greenhouse API",
-        "try": ["/api/ping", "/health"]
-    }, 200
+    static_dir = os.path.join(os.path.dirname(__file__), 'static')
+    index_path = os.path.join(static_dir, 'index.html')
+    if os.path.exists(index_path):
+        return send_from_directory(static_dir, 'index.html')
+    return {"status": "ok", "service": "Smart Greenhouse API", "try": ["/api/ping", "/health"]}, 200
 
 # Combined health check
 @app.route('/health')

@@ -21,3 +21,6 @@ class Config:
     DB_POOL_SIZE = int(os.getenv("DB_POOL_SIZE", "5"))
     DB_MAX_OVERFLOW = int(os.getenv("DB_MAX_OVERFLOW", "10"))
     
+    # Feature flags
+    USE_DUMMY_DATA = os.getenv("USE_DUMMY_DATA", "false").strip().lower() in {"1", "true", "yes", "on"}
+    

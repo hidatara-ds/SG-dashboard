@@ -38,6 +38,8 @@ def ping():
 
 @bp.route("/health")
 def health():
+    if Config.USE_DUMMY_DATA:
+        return jsonify({"status": "healthy", "database": "dummy", "tunnel": "n/a"}), 200
     try:
         conn = get_db_connection()
         cur = conn.cursor()
@@ -53,6 +55,11 @@ def health():
 @require_api_key
 @handle_db_error
 def latest_readings():
+    if Config.USE_DUMMY_DATA:
+        sample = [
+            {"reading_id": 1, "zone_code": "HZ1", "encoded_data": "01F400C8012C", "timestamp": "2025-09-22T08:00:00Z"}
+        ]
+        return jsonify({"status": "success", "count": len(sample), "readings": sample}), 200
     conn = get_db_connection()
     cur = conn.cursor()
     cur.execute("""
@@ -80,6 +87,9 @@ def latest_readings():
 @require_api_key
 @handle_db_error
 def latest_reading_device(device_code):
+    if Config.USE_DUMMY_DATA:
+        reading = {"encoded_data": "01F400C8012C", "timestamp": "2025-09-22T08:00:00Z"}
+        return jsonify({"status": "success", "device_code": device_code, "reading": reading}), 200
     conn = get_db_connection()
     cur = conn.cursor()
     cur.execute("""
@@ -103,6 +113,12 @@ def latest_reading_device(device_code):
 @require_api_key
 @handle_db_error
 def readings_24h(device_code):
+    if Config.USE_DUMMY_DATA:
+        data = [
+            {"encoded_data": "01F400BE012C", "timestamp": "2025-09-22T08:00:00Z"},
+            {"encoded_data": "01F400C00128", "timestamp": "2025-09-22T04:00:00Z"}
+        ]
+        return jsonify({"status": "success", "device_code": device_code, "interval": "4h", "readings": data}), 200
     conn = get_db_connection()
     cur = conn.cursor()
     cur.execute("""
@@ -123,6 +139,12 @@ def readings_24h(device_code):
 @require_api_key
 @handle_db_error
 def readings_7d(device_code):
+    if Config.USE_DUMMY_DATA:
+        data = [
+            {"day": "2025-09-22", "avg_encoded": 500.5, "sample_time": "2025-09-22T08:00:00Z"},
+            {"day": "2025-09-21", "avg_encoded": 485.2, "sample_time": "2025-09-21T08:00:00Z"}
+        ]
+        return jsonify({"status": "success", "device_code": device_code, "interval": "1d", "readings": data}), 200
     conn = get_db_connection()
     cur = conn.cursor()
     cur.execute("""
@@ -147,6 +169,11 @@ def readings_7d(device_code):
 @require_api_key
 @handle_db_error
 def get_devices():
+    if Config.USE_DUMMY_DATA:
+        results = [
+            {"device_id": 1, "dev_eui": "demo", "code": "HZ1", "description": "Hydroponic Controller", "zone_code": "HZ1", "zone_label": "Hydro 1", "plant_name": "Hidroponik"}
+        ]
+        return jsonify({"devices": results, "count": len(results)}), 200
     conn = get_db_connection()
     try:
         cur = conn.cursor()
@@ -182,6 +209,13 @@ def get_devices():
 @require_api_key
 @handle_db_error
 def get_device_sensors(device_code):
+    if Config.USE_DUMMY_DATA:
+        results = [
+            {"device_sensor_id": 1, "sensor_label": "pH", "sensor_order": 1, "sensor_type": "pH", "unit": "", "sensor_model": "HX"},
+            {"device_sensor_id": 2, "sensor_label": "TDS", "sensor_order": 2, "sensor_type": "TDS", "unit": "ppm", "sensor_model": "HX"},
+            {"device_sensor_id": 3, "sensor_label": "Temperature", "sensor_order": 3, "sensor_type": "Temperature", "unit": "°C", "sensor_model": "DS18B20"}
+        ]
+        return jsonify({"device_code": device_code, "sensors": results}), 200
     conn = get_db_connection()
     try:
         cur = conn.cursor()
@@ -220,6 +254,11 @@ def get_device_sensors(device_code):
 @handle_db_error
 def get_plants():
     """Get all plants"""
+    if Config.USE_DUMMY_DATA:
+        results = [
+            {"plant_id": 1, "name": "Hidroponik", "media_type": "Hidroponik", "description": "Demo", "zone_count": 1}
+        ]
+        return jsonify({"plants": results, "count": len(results)}), 200
     conn = get_db_connection()
     try:
         cur = conn.cursor()

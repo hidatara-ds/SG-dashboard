@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Smart Greenhouse API</title>
+	<style>
+		body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Noto Sans,sans-serif;margin:0;background:#0b132b;color:#e0e6f1;display:flex;min-height:100vh;align-items:center;justify-content:center}
+		.container{max-width:720px;padding:32px}
+		.card{background:#1c2541;border-radius:12px;padding:28px;box-shadow:0 10px 30px rgba(0,0,0,.25)}
+		h1{margin:0 0 8px;font-size:28px}
+		p{margin:0 0 12px;opacity:.9}
+		ul{margin:12px 0 0}
+		li{margin:6px 0}
+		a{color:#35a7ff;text-decoration:none}
+		a:hover{text-decoration:underline}
+	</style>
+</head>
+<body>
+	<div class="container">
+		<div class="card">
+			<h1>Smart Greenhouse API</h1>
+			<p>Status: <strong>Online</strong></p>
+			<p>Endpoints cepat uji:</p>
+			<ul>
+				<li><a href="/api/ping">/api/ping</a></li>
+				<li><a href="/health">/health</a></li>
+			</ul>
+			<p style="margin-top:16px;opacity:.8">Protected endpoint memerlukan header <code>X-API-KEY</code>.</p>
+		</div>
+	</div>
+</body>
+</html>
+
