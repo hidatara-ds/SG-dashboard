@@ -45,6 +45,15 @@ def create_app():
 
 app = create_app()
 
+# Root route for service landing
+@app.route('/')
+def index():
+    return {
+        "status": "ok",
+        "service": "Smart Greenhouse API",
+        "try": ["/api/ping", "/health"]
+    }, 200
+
 # Combined health check
 @app.route('/health')
 def health_check():
