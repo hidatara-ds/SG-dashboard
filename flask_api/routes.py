@@ -13,6 +13,9 @@ def require_api_key(f):
     @wraps(f)
     def decorated(*args, **kwargs):
         if request.endpoint not in ("api.ping", "api.health"):
+            # In dummy mode, bypass authentication for easier demo/testing
+            if getattr(Config, 'USE_DUMMY_DATA', False):
+                return f(*args, **kwargs)
             client_key = request.headers.get("X-API-KEY")
             if client_key != Config.API_KEY:
                 logging.warning(f"Unauthorized access attempt from {request.remote_addr}")
