@@ -4,6 +4,7 @@ import logging
 from functools import wraps
 from db import get_db_connection
 from config import Config
+from auth import require_api_key
 
 bp = Blueprint("api", __name__)
 
