@@ -4,6 +4,7 @@ import os
 import logging
 from flask import Flask
 from flask_cors import CORS
+from config import Config
 
 # Add parent directory to path for webhook imports
 sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
@@ -20,11 +21,14 @@ def create_app():
     CORS(app)
     
     # Simple logging setup
+    logs_dir = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'logs')
+    os.makedirs(logs_dir, exist_ok=True)
+    log_file_path = os.path.join(logs_dir, 'app.log')
     logging.basicConfig(
         level=logging.INFO,
         format='%(asctime)s [%(levelname)s] %(name)s: %(message)s',
         handlers=[
-            logging.FileHandler('/home/elektro1/smart_greenhouse/logs/app.log'),
+            logging.FileHandler(log_file_path),
             logging.StreamHandler()
         ]
     )
@@ -69,8 +73,5 @@ def health_check():
         }, 500
 
 if __name__ == "__main__":
-    # Ensure logs directory exists
-    os.makedirs('/home/elektro1/smart_greenhouse/logs', exist_ok=True)
-    
     app.logger.info("Starting Smart Greenhouse API with Webhook Support")
-    app.run(host="0.0.0.0", port=5000, debug=False)
+    app.run(host="0.0.0.0", port=Config.PORT, debug=(Config.FLASK_ENV == 'development'))
